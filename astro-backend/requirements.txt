@@ -1,7 +1,7 @@
-fastapi
-uvicorn
-python-dotenv
-pyswisseph
-openai
-requests
-python-multipart
+fastapi==0.95.2
+uvicorn==0.22.0
+python-dotenv==1.0.0
+pyswisseph==2.8.0.post1
+openai==0.28.1
+requests==2.31.0
+python-multipart==0.0.6
