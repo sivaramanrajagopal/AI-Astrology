@@ -11,6 +11,15 @@ import uvicorn
 python_version = sys.version_info
 print(f"🐍 Python version: {python_version.major}.{python_version.minor}.{python_version.micro}")
 
+# Check if Python version is compatible
+if python_version.major == 3 and python_version.minor >= 13:
+    print("⚠️  Warning: Python 3.13+ may have compatibility issues with pyswisseph")
+    print("💡 Consider using Python 3.10 for better compatibility")
+elif python_version.major == 3 and python_version.minor == 10:
+    print("✅ Using Python 3.10 - should be compatible with pyswisseph")
+else:
+    print(f"ℹ️  Using Python {python_version.major}.{python_version.minor}")
+
 # Try to import the required modules
 try:
     import pyswisseph as swe
@@ -18,6 +27,7 @@ try:
 except ImportError as e:
     print(f"❌ Error importing pyswisseph: {e}")
     print("💡 This might be due to Python version incompatibility")
+    print("🔧 Try using Python 3.10 instead of Python 3.13")
     sys.exit(1)
 
 try:

@@ -1,15 +1,14 @@
 #!/usr/bin/env bash
 # Build script for Render deployment
 
-echo "Installing system dependencies..."
-# Install build dependencies for Swiss Ephemeris
-apt-get update -qq && apt-get install -y build-essential
+echo "🐍 Checking Python version..."
+python --version
 
-echo "Installing Python dependencies..."
+echo "📦 Installing Python dependencies..."
 pip install -r requirements.txt
 
-echo "Setting up environment..."
-cd astro-backend
+echo "🔍 Verifying pyswisseph installation..."
+python -c "import pyswisseph; print('✅ pyswisseph imported successfully')"
 
-echo "Starting server..."
-python start_production.py 
+echo "🚀 Starting server..."
+python start_simple.py 
