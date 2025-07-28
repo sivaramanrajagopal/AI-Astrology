@@ -7,8 +7,5 @@ python --version
 echo "📦 Installing Python dependencies..."
 pip install -r requirements.txt
 
-echo "🔍 Verifying pyswisseph installation..."
-python -c "import pyswisseph; print('✅ pyswisseph imported successfully')"
-
 echo "🚀 Starting server..."
-python start_simple.py 
+python start_minimal.py 
