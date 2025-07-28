@@ -7,6 +7,14 @@ import os
 import sys
 import uvicorn
 
+# Check Python version
+python_version = sys.version_info
+print(f"🐍 Python version: {python_version.major}.{python_version.minor}.{python_version.micro}")
+
+if python_version.major == 3 and python_version.minor >= 13:
+    print("⚠️  Warning: Python 3.13+ may have compatibility issues with pyswisseph")
+    print("💡 Consider using Python 3.11 for better compatibility")
+
 # Add the current directory to Python path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -16,15 +24,9 @@ try:
     print("✅ Successfully imported pyswisseph")
 except ImportError as e:
     print(f"❌ Error importing pyswisseph: {e}")
-    print("Attempting to install pyswisseph...")
-    import subprocess
-    try:
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "pyswisseph==2.8.0.post1"])
-        import pyswisseph as swe
-        print("✅ Successfully installed and imported pyswisseph")
-    except Exception as install_error:
-        print(f"❌ Failed to install pyswisseph: {install_error}")
-        sys.exit(1)
+    print("💡 This might be due to Python version incompatibility")
+    print("🔧 Try using Python 3.11 instead of Python 3.13")
+    sys.exit(1)
 
 # Now import the main app
 try:
@@ -40,6 +42,5 @@ if __name__ == "__main__":
 
     print(f"🚀 Starting server on {host}:{port}")
     print(f"📁 Working directory: {os.getcwd()}")
-    print(f"🐍 Python path: {sys.path}")
     
     uvicorn.run(app, host=host, port=port) 
