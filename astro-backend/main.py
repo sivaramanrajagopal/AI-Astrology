@@ -3,17 +3,6 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import datetime
 import os
-from validation import validate_birth_data, sanitize_string
-
-# --- Imports from other modules ---
-from astrology import get_planet_positions, generate_gpt_prompt, get_astrology_interpretation
-from carear import analyze_career, generate_career_report
-from allyogas import detect_yogas
-from dasa import generate_dasa_table
-from life_purpose import analyze_life_purpose, generate_purpose_report, ask_gpt
-from dasa_bhukti import get_planet_positions as get_dasa_positions, generate_dasa_table as generate_dasa_bhukti_table, ask_gpt_dasa_prediction
-from spouse_analysis import get_planet_positions as get_spouse_positions, get_aspects as get_spouse_aspects, analyze_marriage, generate_report as spouse_report, ask_gpt_spouse
-from indu_dasa import get_indu_dasa
 
 # --- FastAPI App ---
 app = FastAPI(
@@ -37,7 +26,7 @@ app.add_middleware(
 def root():
     return {
         "message":
-        "Astrology API is running. Endpoints: /predict, /career, /dasa, /yogas, /life_purpose, /dasa_bhukti, /spouse, /indu_dasa."
+        "Astrology API is running. Endpoints: /test, /predict, /career, /dasa, /yogas, /life_purpose, /dasa_bhukti, /spouse, /indu_dasa."
     }
 
 @app.get("/test")
@@ -52,11 +41,15 @@ def predict(dob: str,
             lon: float,
             tz_offset: float = 5.5):
     """Returns planetary positions and GPT-based predictions."""
-    is_valid, error_msg = validate_birth_data(dob, tob, lat, lon, tz_offset)
-    if not is_valid:
-        raise HTTPException(status_code=400, detail=error_msg)
-    
     try:
+        # Lazy import to avoid startup issues
+        from validation import validate_birth_data
+        from astrology import get_planet_positions, generate_gpt_prompt, get_astrology_interpretation
+        
+        is_valid, error_msg = validate_birth_data(dob, tob, lat, lon, tz_offset)
+        if not is_valid:
+            raise HTTPException(status_code=400, detail=error_msg)
+        
         data, _, _ = get_planet_positions(dob, tob, lat, lon, tz_offset)
         prompt = generate_gpt_prompt(data)
         interpretation = get_astrology_interpretation(prompt)
@@ -71,11 +64,16 @@ def career(dob: str,
            lon: float,
            tz_offset: float = 5.5):
     """Returns career analysis and recommendations."""
-    is_valid, error_msg = validate_birth_data(dob, tob, lat, lon, tz_offset)
-    if not is_valid:
-        raise HTTPException(status_code=400, detail=error_msg)
-    
     try:
+        # Lazy import to avoid startup issues
+        from validation import validate_birth_data
+        from astrology import get_planet_positions
+        from carear import analyze_career, generate_career_report
+        
+        is_valid, error_msg = validate_birth_data(dob, tob, lat, lon, tz_offset)
+        if not is_valid:
+            raise HTTPException(status_code=400, detail=error_msg)
+        
         data, _, _ = get_planet_positions(dob, tob, lat, lon, tz_offset)
         career_analysis = analyze_career(data)
         career_report = generate_career_report(career_analysis)
@@ -90,11 +88,16 @@ def dasa(dob: str,
          lon: float,
          tz_offset: float = 5.5):
     """Returns Dasa periods and predictions."""
-    is_valid, error_msg = validate_birth_data(dob, tob, lat, lon, tz_offset)
-    if not is_valid:
-        raise HTTPException(status_code=400, detail=error_msg)
-    
     try:
+        # Lazy import to avoid startup issues
+        from validation import validate_birth_data
+        from astrology import get_planet_positions
+        from dasa import generate_dasa_table
+        
+        is_valid, error_msg = validate_birth_data(dob, tob, lat, lon, tz_offset)
+        if not is_valid:
+            raise HTTPException(status_code=400, detail=error_msg)
+        
         data, _, _ = get_planet_positions(dob, tob, lat, lon, tz_offset)
         dasa_table = generate_dasa_table(data)
         return {"chart": data, "dasa_table": dasa_table}
@@ -108,11 +111,16 @@ def yogas(dob: str,
           lon: float,
           tz_offset: float = 5.5):
     """Returns detected Yogas and their effects."""
-    is_valid, error_msg = validate_birth_data(dob, tob, lat, lon, tz_offset)
-    if not is_valid:
-        raise HTTPException(status_code=400, detail=error_msg)
-    
     try:
+        # Lazy import to avoid startup issues
+        from validation import validate_birth_data
+        from astrology import get_planet_positions
+        from allyogas import detect_yogas
+        
+        is_valid, error_msg = validate_birth_data(dob, tob, lat, lon, tz_offset)
+        if not is_valid:
+            raise HTTPException(status_code=400, detail=error_msg)
+        
         data, _, _ = get_planet_positions(dob, tob, lat, lon, tz_offset)
         detected_yogas = detect_yogas(data)
         return {"chart": data, "yogas": detected_yogas}
@@ -126,11 +134,16 @@ def life_purpose(dob: str,
                 lon: float,
                 tz_offset: float = 5.5):
     """Returns life purpose analysis and guidance."""
-    is_valid, error_msg = validate_birth_data(dob, tob, lat, lon, tz_offset)
-    if not is_valid:
-        raise HTTPException(status_code=400, detail=error_msg)
-    
     try:
+        # Lazy import to avoid startup issues
+        from validation import validate_birth_data
+        from astrology import get_planet_positions
+        from life_purpose import analyze_life_purpose, generate_purpose_report
+        
+        is_valid, error_msg = validate_birth_data(dob, tob, lat, lon, tz_offset)
+        if not is_valid:
+            raise HTTPException(status_code=400, detail=error_msg)
+        
         data, _, _ = get_planet_positions(dob, tob, lat, lon, tz_offset)
         purpose_analysis = analyze_life_purpose(data)
         purpose_report = generate_purpose_report(purpose_analysis)
@@ -145,11 +158,15 @@ def dasa_bhukti(dob: str,
                 lon: float,
                 tz_offset: float = 5.5):
     """Returns detailed Dasa-Bhukti periods and predictions."""
-    is_valid, error_msg = validate_birth_data(dob, tob, lat, lon, tz_offset)
-    if not is_valid:
-        raise HTTPException(status_code=400, detail=error_msg)
-    
     try:
+        # Lazy import to avoid startup issues
+        from validation import validate_birth_data
+        from dasa_bhukti import get_planet_positions as get_dasa_positions, generate_dasa_table as generate_dasa_bhukti_table
+        
+        is_valid, error_msg = validate_birth_data(dob, tob, lat, lon, tz_offset)
+        if not is_valid:
+            raise HTTPException(status_code=400, detail=error_msg)
+        
         data, _, _ = get_dasa_positions(dob, tob, lat, lon, tz_offset)
         dasa_bhukti_table = generate_dasa_bhukti_table(data)
         return {"chart": data, "dasa_bhukti_table": dasa_bhukti_table}
@@ -163,11 +180,15 @@ def spouse(dob: str,
           lon: float,
           tz_offset: float = 5.5):
     """Returns spouse analysis and marriage predictions."""
-    is_valid, error_msg = validate_birth_data(dob, tob, lat, lon, tz_offset)
-    if not is_valid:
-        raise HTTPException(status_code=400, detail=error_msg)
-    
     try:
+        # Lazy import to avoid startup issues
+        from validation import validate_birth_data
+        from spouse_analysis import get_planet_positions as get_spouse_positions, analyze_marriage, generate_report as spouse_report
+        
+        is_valid, error_msg = validate_birth_data(dob, tob, lat, lon, tz_offset)
+        if not is_valid:
+            raise HTTPException(status_code=400, detail=error_msg)
+        
         data, _, _ = get_spouse_positions(dob, tob, lat, lon, tz_offset)
         spouse_analysis = analyze_marriage(data)
         spouse_report_text = spouse_report(spouse_analysis)
@@ -182,11 +203,16 @@ def indu_dasa(dob: str,
               lon: float,
               tz_offset: float = 5.5):
     """Returns Indu Dasa periods and predictions."""
-    is_valid, error_msg = validate_birth_data(dob, tob, lat, lon, tz_offset)
-    if not is_valid:
-        raise HTTPException(status_code=400, detail=error_msg)
-    
     try:
+        # Lazy import to avoid startup issues
+        from validation import validate_birth_data
+        from astrology import get_planet_positions
+        from indu_dasa import get_indu_dasa
+        
+        is_valid, error_msg = validate_birth_data(dob, tob, lat, lon, tz_offset)
+        if not is_valid:
+            raise HTTPException(status_code=400, detail=error_msg)
+        
         data, _, _ = get_planet_positions(dob, tob, lat, lon, tz_offset)
         indu_dasa_table = get_indu_dasa(data)
         return {"chart": data, "indu_dasa_table": indu_dasa_table}

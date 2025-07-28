@@ -1,4 +1,3 @@
-import pyswisseph as swe
 import datetime
 import os
 from openai import OpenAI
@@ -8,10 +7,6 @@ from env_config import OPENAI_API_KEY
 # --- Load OpenAI Key ---
 load_dotenv()
 client = OpenAI(api_key=OPENAI_API_KEY)
-
-# --- Setup Swiss Ephemeris ---
-swe.set_ephe_path('./ephe')  # Use current directory for ephemeris files
-swe.set_sid_mode(swe.SIDM_LAHIRI)  # Lahiri ayanamsa (Vedic)
 
 # --- Nakshatras & Rasis ---
 nakshatras = [
@@ -48,6 +43,13 @@ def get_planet_positions(dob, tob, lat, lon, tz_offset):
     Returns planetary positions along with Ascendant and house cusps.
     Output: data (dict), ascendant_degree (float), cusps (list)
     """
+    # Lazy import of pyswisseph
+    import pyswisseph as swe
+    
+    # --- Setup Swiss Ephemeris ---
+    swe.set_ephe_path('./ephe')  # Use current directory for ephemeris files
+    swe.set_sid_mode(swe.SIDM_LAHIRI)  # Lahiri ayanamsa (Vedic)
+    
     print(f"DEBUG: get_planet_positions called with lat={lat}, lon={lon}, tz_offset={tz_offset}")
     local_dt = datetime.datetime.strptime(f"{dob} {tob}", "%Y-%m-%d %H:%M")
     utc_dt = local_dt - datetime.timedelta(hours=tz_offset)
