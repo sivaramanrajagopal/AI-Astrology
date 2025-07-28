@@ -118,21 +118,66 @@ export default function Home() {
   const [induDasa, setInduDasa] = useState(null);
 
   const backend = process.env.NODE_ENV === 'production' 
-    ? process.env.NEXT_PUBLIC_BACKEND_URL || "https://your-backend-domain.onrender.com"
+    ? process.env.NEXT_PUBLIC_BACKEND_URL || "https://ai-astrology.onrender.com"
     : "http://127.0.0.1:8000";
+
+  console.log('Backend URL:', backend);
+  console.log('Environment:', process.env.NODE_ENV);
 
   const getPrediction = async () => {
     setLoading(true);
     try {
+      console.log('Making requests to:', backend);
+      
       const [chartRes, careerRes, dasaRes, yogaRes, lifePurposeRes, dasaBhuktiRes, spouseRes, induDasaRes] = await Promise.all([
-        fetch(`${backend}/predict?${new URLSearchParams({ dob, tob, lat, lon, tz_offset: "5.5" })}`).then(res => res.json()),
-        fetch(`${backend}/career?${new URLSearchParams({ dob, tob, lat, lon, tz_offset: "5.5" })}`).then(res => res.json()),
-        fetch(`${backend}/dasa?${new URLSearchParams({ dob, tob, lat, lon, tz_offset: "5.5" })}`).then(res => res.json()),
-        fetch(`${backend}/yogas?${new URLSearchParams({ dob, tob, lat, lon, tz_offset: "5.5" })}`).then(res => res.json()),
-        fetch(`${backend}/life_purpose?${new URLSearchParams({ dob, tob, lat, lon, tz_offset: "5.5" })}`).then(res => res.json()),
-        fetch(`${backend}/dasa_bhukti?${new URLSearchParams({ dob, tob, lat, lon, tz_offset: "5.5" })}`).then(res => res.json()),
-        fetch(`${backend}/spouse?${new URLSearchParams({ dob, tob, lat, lon, tz_offset: "5.5", gender: "Male" })}`).then(res => res.json()),
-        fetch(`${backend}/indu_dasa?${new URLSearchParams({ dob, tob, lat, lon, tz_offset: "5.5" })}`).then(res => res.json()),
+        fetch(`${backend}/predict?${new URLSearchParams({ dob, tob, lat, lon, tz_offset: "5.5" })}`).then(res => {
+          if (!res.ok) {
+            throw new Error(`Predict endpoint failed: ${res.status} ${res.statusText}`);
+          }
+          return res.json();
+        }),
+        fetch(`${backend}/career?${new URLSearchParams({ dob, tob, lat, lon, tz_offset: "5.5" })}`).then(res => {
+          if (!res.ok) {
+            throw new Error(`Career endpoint failed: ${res.status} ${res.statusText}`);
+          }
+          return res.json();
+        }),
+        fetch(`${backend}/dasa?${new URLSearchParams({ dob, tob, lat, lon, tz_offset: "5.5" })}`).then(res => {
+          if (!res.ok) {
+            throw new Error(`Dasa endpoint failed: ${res.status} ${res.statusText}`);
+          }
+          return res.json();
+        }),
+        fetch(`${backend}/yogas?${new URLSearchParams({ dob, tob, lat, lon, tz_offset: "5.5" })}`).then(res => {
+          if (!res.ok) {
+            throw new Error(`Yogas endpoint failed: ${res.status} ${res.statusText}`);
+          }
+          return res.json();
+        }),
+        fetch(`${backend}/life_purpose?${new URLSearchParams({ dob, tob, lat, lon, tz_offset: "5.5" })}`).then(res => {
+          if (!res.ok) {
+            throw new Error(`Life purpose endpoint failed: ${res.status} ${res.statusText}`);
+          }
+          return res.json();
+        }),
+        fetch(`${backend}/dasa_bhukti?${new URLSearchParams({ dob, tob, lat, lon, tz_offset: "5.5" })}`).then(res => {
+          if (!res.ok) {
+            throw new Error(`Dasa bhukti endpoint failed: ${res.status} ${res.statusText}`);
+          }
+          return res.json();
+        }),
+        fetch(`${backend}/spouse?${new URLSearchParams({ dob, tob, lat, lon, tz_offset: "5.5", gender: "Male" })}`).then(res => {
+          if (!res.ok) {
+            throw new Error(`Spouse endpoint failed: ${res.status} ${res.statusText}`);
+          }
+          return res.json();
+        }),
+        fetch(`${backend}/indu_dasa?${new URLSearchParams({ dob, tob, lat, lon, tz_offset: "5.5" })}`).then(res => {
+          if (!res.ok) {
+            throw new Error(`Indu dasa endpoint failed: ${res.status} ${res.statusText}`);
+          }
+          return res.json();
+        }),
       ]);
 
       setResult(chartRes);
@@ -145,7 +190,7 @@ export default function Home() {
       setInduDasa(induDasaRes);
     } catch (error) {
       console.error('Error:', error);
-      alert("Error fetching data. Please try again.");
+      alert(`Error fetching data: ${error.message}. Please check your backend URL: ${backend}`);
     } finally {
       setLoading(false);
     }
