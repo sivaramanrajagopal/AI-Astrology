@@ -14,7 +14,9 @@ print(f"🐍 Python version: {python_version.major}.{python_version.minor}.{pyth
 # Check if Python version is compatible
 if python_version.major == 3 and python_version.minor >= 13:
     print("⚠️  Warning: Python 3.13+ may have compatibility issues with pyswisseph")
-    print("💡 Consider using Python 3.10 for better compatibility")
+    print("💡 Consider using Python 3.9 for better compatibility")
+elif python_version.major == 3 and python_version.minor == 9:
+    print("✅ Using Python 3.9 - should be compatible with pyswisseph")
 elif python_version.major == 3 and python_version.minor == 10:
     print("✅ Using Python 3.10 - should be compatible with pyswisseph")
 else:
@@ -27,7 +29,7 @@ try:
 except ImportError as e:
     print(f"❌ Error importing pyswisseph: {e}")
     print("💡 This might be due to Python version incompatibility")
-    print("🔧 Try using Python 3.10 instead of Python 3.13")
+    print("🔧 Try using Python 3.9 or 3.10 instead of Python 3.13")
     sys.exit(1)
 
 try:
