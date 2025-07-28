@@ -12,7 +12,7 @@ app = FastAPI(
 )
 
 # --- CORS Settings ---
-ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000,https://your-frontend-domain.vercel.app").split(",")
+ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000,https://ai-astrology.vercel.app").split(",")
 
 app.add_middleware(
     CORSMiddleware,
