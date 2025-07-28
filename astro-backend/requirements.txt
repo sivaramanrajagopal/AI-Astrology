@@ -1,7 +1,10 @@
-fastapi==0.116.1
-uvicorn==0.35.0
+
 python-dotenv==1.0.0
-pyswisseph==2.8.0.post1
-openai==1.93.0
+flask==2.3.3
 requests==2.31.0
-python-multipart==0.0.6 
+datetime
+fastapi
+uvicorn
+swisseph
+openai
+python-dotenv
