@@ -1,11 +1,15 @@
 #!/usr/bin/env bash
 # Build script for Render deployment
 
-echo "Installing dependencies..."
+echo "Installing system dependencies..."
+# Install build dependencies for Swiss Ephemeris
+apt-get update -qq && apt-get install -y build-essential
+
+echo "Installing Python dependencies..."
 pip install -r requirements.txt
 
 echo "Setting up environment..."
 cd astro-backend
 
 echo "Starting server..."
-uvicorn main:app --host 0.0.0.0 --port $PORT 
+python start_production.py 
