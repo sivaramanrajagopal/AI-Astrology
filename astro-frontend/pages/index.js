@@ -124,6 +124,20 @@ export default function Home() {
   console.log('Backend URL:', backend);
   console.log('Environment:', process.env.NODE_ENV);
 
+  // Test backend connection
+  const testBackend = async () => {
+    try {
+      console.log('Testing backend connection to:', backend);
+      const response = await fetch(`${backend}/test`);
+      const data = await response.json();
+      console.log('Backend test response:', data);
+      alert(`Backend test successful! Response: ${JSON.stringify(data)}`);
+    } catch (error) {
+      console.error('Backend test failed:', error);
+      alert(`Backend test failed: ${error.message}`);
+    }
+  };
+
   const getPrediction = async () => {
     setLoading(true);
     try {
@@ -1813,6 +1827,17 @@ export default function Home() {
                     Generate Complete Analysis
                   </>
                 )}
+              </button>
+
+              <button
+                onClick={testBackend}
+                style={{
+                  ...styles.button,
+                  backgroundColor: '#059669',
+                  marginTop: '10px'
+                }}
+              >
+                🔧 Test Backend Connection
               </button>
             </div>
 
