@@ -2,7 +2,6 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import datetime
-import pyswisseph as swe
 import os
 from validation import validate_birth_data, sanitize_string
 
@@ -40,6 +39,11 @@ def root():
         "message":
         "Astrology API is running. Endpoints: /predict, /career, /dasa, /yogas, /life_purpose, /dasa_bhukti, /spouse, /indu_dasa."
     }
+
+@app.get("/test")
+def test():
+    """Simple test endpoint to verify server is running."""
+    return {"status": "success", "message": "Server is running correctly!"}
 
 @app.get("/predict")
 def predict(dob: str,
