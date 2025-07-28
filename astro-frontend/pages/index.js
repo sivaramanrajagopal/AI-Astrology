@@ -123,6 +123,8 @@ export default function Home() {
 
   console.log('Backend URL:', backend);
   console.log('Environment:', process.env.NODE_ENV);
+  console.log('NEXT_PUBLIC_BACKEND_URL:', process.env.NEXT_PUBLIC_BACKEND_URL);
+  console.log('All env vars:', Object.keys(process.env).filter(key => key.startsWith('NEXT_PUBLIC_')));
 
   // Test backend connection
   const testBackend = async () => {
